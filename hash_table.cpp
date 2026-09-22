@@ -6,82 +6,116 @@
  * @date 09-22-26 - Created File
  */
 
- #include "hash_table.h"
+#include "hash_table.h"
 #include "hash_node.h"
+#include "milestone2.h"
+#include <string>
 
 // TODO: Comment
 HashNode** HashTable::getTable()
 {
-	//TODO: Implement
-	return nullptr;
+	return table;
 }
 
 // TODO: Comment
 int HashTable::getSize()
 {
-	//TODO: Implement
-	return 0;
+	return numberOfBuckets;
 }
 
 // TODO: Comment
 int HashTable::calculateHashCode(int currentKey)
 {
-	//TODO: Implement
-	return 0;
+	return currentKey % getSize();
 }
 
 // TODO: Comment
 bool HashTable::isEmpty()
 {
-	//TODO: Implement
-	return false;
+	for(int i = 0; i< numberOfBuckets; i++)
+	{
+		if(table[i] != nullptr)
+			return false;
+	}
+	return true;
 }
 
 // TODO: Comment
 int HashTable::getNumberOfItems()
 {
-	//TODO: Implement
-	return 0;
+	int num = 0;
+	for(int i = 0; i< numberOfBuckets; i++)
+	{
+		if(table[i] != nullptr)
+			num++;
+	}
+	return num;
 }
 
 // TODO: Comment
 bool HashTable::add(int curKey, HashNode* mynode)
 {
-	//TODO: Implement
-	return false;
+	int code = calculateHashCode(curKey);
+	table[code] = mynode;
+	return true;
 }
 
 // TODO: Comment
 bool HashTable::remove(int curKey)
 {
-	//TODO: Implement
+	int code = calculateHashCode(curKey);
+	if(table[code]->key == curKey)
+	{
+		delete table[code];
+		table[code] = nullptr;
+		return true;
+	}
+
 	return false;
 }
 
 // TODO: Comment
 void HashTable::clear()
 {
-	//TODO: Implement
-	return;
+	for(int i = 0; i< numberOfBuckets; i++)
+	{
+		if(table[i] != nullptr)
+		{
+			delete table[i];
+			table[i] = nullptr;
+		}
+	}
 }
 
 // TODO: Comment
 HashNode* HashTable::getItem(int curKey)
 {
-	//TODO: Implement
-	return nullptr;
+	int code = calculateHashCode(curKey);
+	return table[code];
 }
 
 // TODO: Comment
 bool HashTable::contains(int curKey)
 {
-	//TODO: Implement
-	return false;
+	int code = calculateHashCode(curKey);
+	return table[code];
 }
 
 // TODO: Comment
 void HashTable::printTable()
 {
-	//TODO: Implement
-	return;
+	logToFileAndConsole("\nHere are the Hash Table contents (" + std::to_string(getNumberOfItems()) + " entries):");
+
+	for(int i = 0; i< numberOfBuckets; i++)
+	{
+		if(table[i] == nullptr)
+			logToFileAndConsole("Bucket " + std::to_string(i) + ": Empty");
+		else
+		{
+			logToFileAndConsole("Bucket " + std::to_string(i) + ": ");
+			table[i]->printNode(true);
+		}
+	}
+
+	logToFileAndConsole("End of table\n");
 }
